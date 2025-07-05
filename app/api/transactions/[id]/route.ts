@@ -38,7 +38,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     return NextResponse.json({ success: true, data: transaction }, { status: 200 });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const errors = Object.values(error.errors).map(err => (err as any).message);
+      const errors = Object.values(error.errors).map(
+        (err) => (err as mongoose.Error.ValidatorError | mongoose.Error.CastError).message
+      );
       return NextResponse.json({ success: false, message: errors.join(', ') }, { status: 400 });
     }
     return NextResponse.json({ success: false, error: (error as Error).message }, { status: 400 });
