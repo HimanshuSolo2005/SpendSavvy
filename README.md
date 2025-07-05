@@ -83,7 +83,7 @@ npm install
 ```php-template
 MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
 ```
-*** Replace <username>, <password>, <cluster-url>, and <database-name> with your actual MongoDB credentials and details. ***
+***Replace <username>, <password>, <cluster-url>, and <database-name> with your actual MongoDB credentials and details.***
 
 ### 4.  Run the Development Server
 ```bash
@@ -140,7 +140,7 @@ personal-finance-visualizer/
 ```
 
 ## Next Steps (Future Stage)
-*** Stage 3: Budgeting***
+***Stage 3: Budgeting***
 
 - Implement features to:
 - Set monthly category budgets
