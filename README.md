@@ -1,5 +1,8 @@
 # Personal Finance Visualizer (Stage 1: Basic Transaction Tracking)
 
+## Live URL
+Deployed on Vercel : https://personal-finance-app-nine.vercel.app/
+
 ## Project Overview
 
 This is the first stage of the Personal Finance Visualizer, a simple web application designed to help users track and visualize their personal financial transactions. This stage focuses on core transaction management functionalities and a basic graphical representation of monthly expenses.
