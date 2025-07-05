@@ -1,10 +1,10 @@
-'use client'; 
+'use client';
 
 import { format } from 'date-fns';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
-import { Transaction } from '@/app/page'; // Import Transaction type
+import { Transaction } from '@/lib/sharedTypes';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -29,6 +29,7 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
           <TableRow>
             <TableHead>Date</TableHead>
             <TableHead>Description</TableHead>
+            <TableHead>Category</TableHead> 
             <TableHead className="text-right">Amount</TableHead>
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
@@ -37,10 +38,12 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
           {transactions.map((transaction) => (
             <TableRow key={transaction._id}>
               <TableCell className="font-medium">
-                {/* Ensure date is parsed correctly from ISO string */}
                 {format(new Date(transaction.date), 'PPP')}
               </TableCell>
               <TableCell>{transaction.description}</TableCell>
+              <TableCell>
+                {transaction.category === '' ? 'Uncategorized' : transaction.category} 
+              </TableCell>
               <TableCell className="text-right">
                 ${transaction.amount.toFixed(2)}
               </TableCell>

@@ -13,7 +13,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Textarea } from '@/components/ui/textarea';
-import { Transaction } from '@/app/page';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+import { Transaction } from '@/lib/sharedTypes';
 
 const formSchema = z.object({
     amount: z.coerce.number()
@@ -26,21 +28,24 @@ const formSchema = z.object({
     description: z.string()
         .min(1, { message: 'Description is required' })
         .max(200, { message: 'Description cannot exceed 200 characters' }),
+    category: z.string().min(1, { message: 'Category is required' }), 
 });
 
 interface TransactionFormProps {
     initialData?: Transaction | null;
     onSuccess: () => void;
     onClose: () => void;
+    categories: string[]; 
 }
 
-export default function TransactionForm({ initialData, onSuccess, onClose }: TransactionFormProps) {
+export default function TransactionForm({ initialData, onSuccess, onClose, categories }: TransactionFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            amount: initialData?.amount || 0,
+            amount: initialData?.amount || 0.01, 
             date: initialData?.date ? new Date(initialData.date) : new Date(),
             description: initialData?.description || '',
+            category: initialData?.category || categories[0] || '', 
         },
     });
 
@@ -50,15 +55,17 @@ export default function TransactionForm({ initialData, onSuccess, onClose }: Tra
                 amount: initialData.amount,
                 date: new Date(initialData.date),
                 description: initialData.description,
+                category: initialData.category,
             });
         } else {
             form.reset({
                 amount: 0.01,
                 date: new Date(),
                 description: '',
+                category: categories[0] || '', 
             });
         }
-    }, [initialData, form]);
+    }, [initialData, form, categories]); 
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const url = initialData ? `/api/transactions/${initialData._id}` : '/api/transactions';
@@ -108,6 +115,7 @@ export default function TransactionForm({ initialData, onSuccess, onClose }: Tra
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name="date"
@@ -149,6 +157,7 @@ export default function TransactionForm({ initialData, onSuccess, onClose }: Tra
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name="description"
@@ -158,6 +167,31 @@ export default function TransactionForm({ initialData, onSuccess, onClose }: Tra
                             <FormControl>
                                 <Textarea placeholder="e.g., Monthly rent payment" {...field} />
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Category</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a category" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {categories.map((category) => (
+                                        <SelectItem key={category} value={category}>
+                                            {category === '' ? 'Uncategorized' : category} 
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <FormMessage />
                         </FormItem>
                     )}

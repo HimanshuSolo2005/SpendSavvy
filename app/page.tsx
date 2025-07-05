@@ -8,14 +8,12 @@ import { toast } from 'sonner';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionList from '@/components/TransactionList';
 import MonthlyExpensesChart from '@/components/MonthlyExpensesChart';
+import CategoryPieChart from '@/components/CategoryPieChart';
+import SummaryCards from '@/components/SummaryCards';
 
-export interface Transaction {
-  _id: string;
-  amount: number;
-  date: string;
-  description: string;
-  createdAt: string;
-}
+// NEW: Import predefinedCategories and Transaction type from the new shared file
+import { predefinedCategories, Transaction } from '@/lib/sharedTypes';
+
 
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -33,14 +31,13 @@ export default function Home() {
         const sortedTransactions = data.data.sort((a: Transaction, b: Transaction) => new Date(b.date).getTime() - new Date(a.date).getTime());
         setTransactions(sortedTransactions);
       } else {
-        toast.error(data.message || 'An unknown error occurred.', {
-        });
+        toast.error(data.message || 'An unknown error occurred.', {});
       }
     } catch (error) {
       toast.error(`Failed to load transactions: ${(error as Error).message}`);
       console.error('Error fetching transactions:', error);
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     fetchTransactions();
@@ -95,13 +92,28 @@ export default function Home() {
     });
   };
 
+  const totalExpenses = transactions.reduce((sum, t) => sum + t.amount, 0);
+  const recentTransactions = transactions.slice(0, 5);
+
+
   return (
     <main className="container mx-auto p-4 md:p-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Personal Finance Visualizer</h1>
 
       <section className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Monthly Expenses Overview</h2>
-        <MonthlyExpensesChart transactions={transactions} />
+        <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
+        <SummaryCards totalExpenses={totalExpenses} recentTransactions={recentTransactions} />
+      </section>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Monthly Expenses Overview</h2>
+          <MonthlyExpensesChart transactions={transactions} />
+        </div>
+        <div className="p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Expenses by Category</h2>
+          <CategoryPieChart transactions={transactions} />
+        </div>
       </section>
 
       <section className="mb-8 p-6 bg-white shadow-lg rounded-lg">
@@ -119,6 +131,7 @@ export default function Home() {
                 initialData={editingTransaction}
                 onSuccess={handleFormSuccess}
                 onClose={() => setIsFormOpen(false)}
+                categories={predefinedCategories}
               />
             </DialogContent>
           </Dialog>

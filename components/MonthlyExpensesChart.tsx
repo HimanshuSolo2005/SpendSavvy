@@ -9,7 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { Transaction } from '@/app/page'; // Import Transaction type from the main page
+import { Transaction } from '@/lib/sharedTypes'; 
 import { format, parseISO } from 'date-fns';
 
 interface MonthlyExpensesChartProps {
@@ -22,11 +22,9 @@ interface ChartData {
 }
 
 export default function MonthlyExpensesChart({ transactions }: MonthlyExpensesChartProps) {
-  // Process transactions to aggregate monthly expenses
   const monthlyDataMap = new Map<string, number>();
 
   transactions.forEach((transaction) => {
-    // Parse the ISO string date and format it to 'YYYY-MM'
     const monthYear = format(parseISO(transaction.date), 'yyyy-MM');
     const currentTotal = monthlyDataMap.get(monthYear) || 0;
     monthlyDataMap.set(monthYear, currentTotal + transaction.amount);
@@ -34,7 +32,7 @@ export default function MonthlyExpensesChart({ transactions }: MonthlyExpensesCh
 
   const chartData: ChartData[] = Array.from(monthlyDataMap.entries())
     .map(([month, total]) => ({ month, total }))
-    .sort((a, b) => a.month.localeCompare(b.month)); // Sort chronologically
+    .sort((a, b) => a.month.localeCompare(b.month)); 
 
   const formattedChartData = chartData.map(data => ({
     ...data,
