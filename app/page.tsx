@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <main className="container mx-auto p-4 md:p-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Personal Finance Visualizer</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">Spend Savvy - Personal Finance Visualizer</h1>
 
       <section className="mb-8 p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
