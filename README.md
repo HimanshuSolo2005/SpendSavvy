@@ -83,7 +83,7 @@ npm install
 ```php-template
 MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
 ```
-*** Replace <username>, <password>, <cluster-url>, and <database-name> with your actual MongoDB credentials and details. ***
+***Replace <username>, <password>, <cluster-url>, and <database-name> with your actual MongoDB credentials and details.***
 
 ### 4.  Run the Development Server
 ```bash
@@ -91,49 +91,56 @@ npm run dev
 ```
 
 ## Project Structure (Relevant for Stage 2)
+```text
 personal-finance-visualizer/
 ├── app/
 │   ├── api/
 │   │   ├── transactions/
 │   │   │   ├── [id]/
-│   │   │   │   └── route.ts         
-│   │   │   └── route.ts              
-│   ├── layout.tsx                   
-│   └── page.tsx                     
+│   │   │   │   └── route.ts            # API routes for GET (single), PUT, DELETE by ID
+│   │   │   └── route.ts                # API routes for GET (all), POST
+│   ├── layout.tsx                      # Root layout for Next.js app (includes Sonner Toaster)
+│   └── page.tsx                        # Main application page (Client Component)
+│
 ├── components/
-│   ├── ui/                           
+│   ├── ui/                             # shadcn/ui generated components
 │   │   ├── button.tsx
 │   │   ├── calendar.tsx
-│   │   ├── card.tsx                  
+│   │   ├── card.tsx                   
 │   │   ├── dialog.tsx
 │   │   ├── form.tsx
 │   │   ├── input.tsx
 │   │   ├── popover.tsx
-│   │   ├── select.tsx                
+│   │   ├── select.tsx                  
 │   │   ├── sonner.tsx
 │   │   ├── table.tsx
 │   │   ├── textarea.tsx
-│   │   └── ... (other shadcn/ui components)
-│   ├── CategoryPieChart.tsx         
-│   ├── MonthlyExpensesChart.tsx   
-│   ├── SummaryCards.tsx
-│   ├── TransactionForm.tsx         
-│   └── TransactionList.tsx           
+│   │   └── ...                         # Other shadcn/ui components
+│   │
+│   ├── CategoryPieChart.tsx            # NEW: Recharts pie chart for category breakdown
+│   ├── MonthlyExpensesChart.tsx        # Recharts bar chart for monthly expenses
+│   ├── SummaryCards.tsx                # NEW: Dashboard summary cards
+│   ├── TransactionForm.tsx             # Form for adding/editing transactions (updated)
+│   └── TransactionList.tsx             # Table for displaying transactions (updated)
+│
 ├── lib/
-│   ├── dbConnect.ts  
-│   └── sharedTypes.ts              
+│   ├── dbConnect.ts                    # MongoDB connection utility
+│   └── sharedTypes.ts                  # NEW: Shared types and predefined data (e.g., categories)
+│
 ├── models/
-│   └── Transaction.ts                
-├── public/                           
-├── .env.local                   
-├── .gitignore                       
+│   └── Transaction.ts                  # Mongoose schema and model for transactions (updated)
+│
+├── public/                             # Static assets
+├── .env.local                          # Environment variables (not committed)
+├── .gitignore                          # Git ignore file
 ├── package.json
 ├── tsconfig.json
-└── README.md                     
+└── README.md                           # This file
 
+```
 
 ## Next Steps (Future Stage)
-*** Stage 3: Budgeting***
+***Stage 3: Budgeting***
 
 - Implement features to:
 - Set monthly category budgets
